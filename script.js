@@ -1,4 +1,13 @@
-// script.js
+// Function to make only the current letter bold
+function makeLetterBold(currentLetterElement) {
+  // Remove bold class from all letters
+  document.querySelectorAll(".letter").forEach((el) => {
+    el.classList.remove("bold");
+  });
+
+  // Add bold class to the clicked letter
+  currentLetterElement.classList.add("bold");
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   const lettersContainer = document.getElementById("letters-container");
@@ -20,14 +29,21 @@ document.addEventListener("DOMContentLoaded", function () {
     letterElement.addEventListener("click", function () {
       enlargeLetter(this);
       playLetterSound(letter);
-      blinkNextLetter(this);
+      blinkCurrentLetter(this); // Call the blinkCurrentLetter function
       changeBackgroundColor(this);
+      makeLetterBold(this); // Call the makeLetterBold function
     });
   });
 
   // Function to enlarge clicked letter
   function enlargeLetter(letterElement) {
-    letterElement.style.fontSize = "3em"; // Adjusted font size for smaller screens
+    // Reset font size for all letters
+    document.querySelectorAll(".letter").forEach((el) => {
+      el.style.fontSize = "";
+    });
+    // Enlarge clicked letter
+    letterElement.style.fontSize = "2em"; // Adjusted font size for smaller screens
+    letterElement.style.fontWeight = "bold";
   }
 
   // Function to play letter sound
@@ -37,19 +53,20 @@ document.addEventListener("DOMContentLoaded", function () {
     audio.play();
   }
 
-  // Function to make next letter blink
-  function blinkNextLetter(currentLetterElement) {
-    const letters = document.querySelectorAll(".letter");
-    const currentIndex = Array.from(letters).indexOf(currentLetterElement);
-    const nextIndex =
-      currentIndex === letters.length - 1 ? 0 : currentIndex + 1;
-    const nextLetterElement = letters[nextIndex];
+  // Function to make only the current letter blink
+  function blinkCurrentLetter(currentLetterElement) {
+    // Remove blink class from all letters
+    document.querySelectorAll(".letter").forEach((el) => {
+      el.classList.remove("blink");
+    });
 
-    nextLetterElement.classList.add("blink");
+    // Add blink class to the clicked letter
+    currentLetterElement.classList.add("blink");
 
     setTimeout(function () {
-      nextLetterElement.classList.remove("blink");
-    }, 1000);
+      // Remove blink class after 1 second
+      currentLetterElement.classList.remove("blink");
+    }, 10000);
   }
 
   // Function to change background color to a random eye-soothing color
